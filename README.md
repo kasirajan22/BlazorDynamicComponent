@@ -1,0 +1,1 @@
+Blazor Dynamic Components is a sample project demonstrating how to create and manage dynamic components in a Blazor application. This project showcases how to load components at runtime based on user interactions, making your application more flexible and interactive.

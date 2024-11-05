@@ -1,0 +1,71 @@
+﻿@page "/"
+
+<PageTitle>Dynamic Component Sample</PageTitle>
+
+<h1>Dynamic Component Sample</h1>
+
+<p>
+    <label>
+        Select your transport: @components.Count
+        <select @onchange="OnDropdownChange">
+            <option value="">Select a value</option>
+            @foreach (var c in components)
+            {
+                <p></p>
+                <option value="@c.Key">@c.Value.Name</option>
+            }
+        </select>
+    </label>
+</p>
+
+@if (selectedComponent is not null)
+{
+    <div class="border border-primary my-1 p-1">
+        <DynamicComponent Type="selectedComponent.Type"
+            Parameters="selectedComponent.Parameters"/>
+    </div>
+}
+
+<p>
+    @Message
+</p>
+
+
+@code {
+    private ComponentMetaData? selectedComponent;
+    private string? Message;
+    private Dictionary<string, ComponentMetaData> components => new()
+        {
+            [nameof(Component1)] = new ComponentMetaData()
+            {
+                Type = typeof(Component1),
+                Name = "Component 1 - Demo",
+                Parameters = { [nameof(Component1.OnClickCallback)] = EventCallback.Factory.Create<MouseEventArgs>(this, CallEvent) }
+            },
+            [nameof(Component2)] = new ComponentMetaData()
+            {
+                Type = typeof(Component2),
+                Name = "Component 2 - Demo",
+                Parameters = { [nameof(Component2.OnClickCallback)] = EventCallback.Factory.Create<MouseEventArgs>(this, CallEvent) }
+            },
+            [nameof(Component3)] = new ComponentMetaData()
+            {
+                Type = typeof(Component3),
+                Name = "Component 3 - Demo",
+                Parameters = { [nameof(Component3.OnClickCallback)] = EventCallback.Factory.Create<MouseEventArgs>(this, CallEvent) }
+            }
+        };
+
+    private void OnDropdownChange(ChangeEventArgs e)
+    {
+        if ((e.Value is string dropdownValue) && !String.IsNullOrWhiteSpace(dropdownValue))
+        {
+            selectedComponent = components[dropdownValue];
+        }
+        else
+        {
+            selectedComponent = null;
+        }
+    }
+    private void CallEvent(MouseEventArgs e) => Message = $"Callback Time is: {DateTime.Now}";
+}

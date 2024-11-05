@@ -1,0 +1,8 @@
+﻿<h3>Component1</h3>
+
+<button @onclick="OnClickCallback">Click to Trigger</button>
+
+@code {
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClickCallback {get;set;}
+}
